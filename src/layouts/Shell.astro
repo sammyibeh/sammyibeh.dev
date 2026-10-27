@@ -1,0 +1,121 @@
+---
+import SEO from 'components/Common/SEO/SEO.astro'
+import { siteMetadata } from 'data/config'
+import '../styles/site.css'
+import '../scripts/buddy/buddy.css'
+
+interface Props {
+  /** Page identity for the scripts (boot, logo route, shell). */
+  page: 'home' | 'about' | 'experience' | 'contact' | 'notfound' | 'success' | 'privacy' | 'music-auth'
+  title?: string
+  description?: string
+  noindex?: boolean
+}
+
+const { page, ...seo } = Astro.props
+const { author } = siteMetadata
+const cfToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
+const nav = [
+  ['about', '/about/'],
+  ['experience', '/experience/'],
+  ['contact', '/contact/'],
+] as const
+const route = page === 'home' || !nav.some(([k]) => k === page) ? '' : `/${page}`
+---
+
+<!doctype html>
+<html lang="en-GB" data-page={page}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#0c1220" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbf7f0" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      // Runs before first paint: theme, motion and the boot/arrival state, so nothing flashes.
+      ;(function () {
+        var d = document.documentElement, mem = {}
+        var st = function (s) { return s ? sessionStorage : localStorage }
+        var get = function (k, s) { try { return st(s).getItem(k) } catch (e) { return mem[k] || null } }
+        var set = function (k, v, s) { mem[k] = v; try { st(s).setItem(k, v) } catch (e) {} }
+        window.__store = { get: get, set: set }
+        d.classList.add('js')
+        var theme = get('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        d.dataset.theme = theme === 'light' ? 'light' : 'dark'
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion')
+        var home = d.dataset.page === 'home'
+        if (get('cd', 1) === '1') { set('cd', '0', 1); d.classList.add('arrive') }
+        else if (home && d.classList.contains('motion') && get('booted', 1) !== '1') d.classList.add('booting')
+        if (home) set('booted', '1', 1)
+      })()
+    </script>
+    {
+      /* Cloudflare Web Analytics is normally auto-injected by Cloudflare; this manual beacon is only for when that's off. */
+      cfToken && page !== 'music-auth' && (
+        <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cfToken })} />
+      )
+    }
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <SEO {...seo} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">skip to content</a>
+    <header class="nav">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label="sammyibeh.dev, home"
+          ><span class="br" aria-hidden="true">{'{'}</span><span aria-hidden="true"
+            ><span class="n">sammyibeh.</span><span class="d">dev</span><span class="r">{route}</span></span
+          ><span class="cur" aria-hidden="true"></span><span class="br" aria-hidden="true">{'}'}</span></a
+        >
+        <div class="nav-right">
+          <nav aria-label="Primary">
+            <ol>
+              {
+                nav.map(([k, href]) => (
+                  <li>
+                    <a href={href} aria-current={k === page ? 'page' : undefined}>
+                      {k}
+                    </a>
+                  </li>
+                ))
+              }
+              <li><a class="resume" href="/resume.pdf">resume</a></li>
+            </ol>
+          </nav>
+          <button class="tt" type="button" role="switch" aria-checked="true" aria-label="Dark theme"
+            ><span class="knob" aria-hidden="true"></span><span class="lbl" aria-hidden="true">dark</span></button
+          >
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <a class="rail" href={`mailto:${author.email}`} aria-label={`Email ${author.email}`}
+      ><span class="in"
+        ><span class="lay base"><span class="t">{author.email}</span><span class="ln"></span></span><span
+          class="lay alt"
+          aria-hidden="true"><span class="t">{author.email}</span><span class="ln"></span></span
+        ></span
+      ></a
+    >
+    <footer>
+      <div class="band" data-surface data-poly="0,100 100,100 100,0" aria-hidden="true"></div>
+      <div class="wrap">
+        <span>Sammy Ibeh · <span data-london>London</span></span>
+        <span><span class="js-only"><button class="hint" type="button" data-open-terminal aria-label="Open the terminal"><kbd>/</kbd> terminal</button> · </span><a href="https://github.com/sammyibeh" target="_blank" rel="noopener noreferrer">github<span class="sr"> (opens in new tab)</span></a> · <a href="https://linkedin.com/in/ibehsamuel" target="_blank" rel="noopener noreferrer">linkedin<span class="sr"> (opens in new tab)</span></a> · <a href="/privacy/">privacy</a></span>
+      </div>
+    </footer>
+    <script>
+      // The avatar is a self-contained module exposing window.Buddy; swapping it is a file replacement.
+      import '../scripts/buddy/avatar.js'
+      import '../scripts/site.js'
+    </script>
+  </body>
+</html>

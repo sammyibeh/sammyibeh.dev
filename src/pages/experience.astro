@@ -1,0 +1,73 @@
+---
+import Shell from '../layouts/Shell.astro'
+import { XP, hash } from 'data/experience'
+---
+
+<Shell
+  page="experience"
+  title="Experience"
+  description="Where Sammy Ibeh has worked, as a git log: senior developer at the Government Digital Service and CTO roles before that."
+>
+  <section class="phead glow-zone">
+    <div class="wrap">
+      <p class="prompt" aria-hidden="true">sammy@ibeh:~$ <b>git log --graph career</b></p>
+      <h1 aria-label="Where I’ve worked"><span class="num" aria-hidden="true">02.</span><span class="t" aria-hidden="true">Where I’ve worked</span></h1>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="tabs" role="tablist" aria-label="Experience view">
+        <button role="tab" id="tab-log" aria-selected="true" aria-controls="panel-log">git log</button>
+        <button role="tab" id="tab-shell" aria-selected="false" aria-controls="panel-shell" tabindex="-1">shell</button>
+      </div>
+      <div role="tabpanel" id="panel-log" aria-labelledby="tab-log">
+        <div class="log rv">
+          {
+            XP.map((x, i) => (
+              <details id={x.id} open={i === 0}>
+                <summary>
+                  <span class="hash">{hash(x.co)}</span>
+                  {x.ref && <span class="ref">{x.ref}</span>}
+                  <span class="msg">
+                    {x.role} @ {x.co}
+                  </span>
+                  <span class="when">{x.when}</span>
+                </summary>
+                <div class="body">
+                  <div>{x.place}</div>
+                  <ul>
+                    {x.pts.map(p => (
+                      <li>{p}</li>
+                    ))}
+                  </ul>
+                  <div class="stat">
+                    {x.pts.length} change{x.pts.length === 1 ? '' : 's'}, <b>{x.pts.length} insertion{x.pts.length === 1 ? '' : 's'}(+)</b>, 0 regrets
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+      <div role="tabpanel" id="panel-shell" aria-labelledby="tab-shell" data-shell hidden>
+        <div class="panel cli">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/experience: zsh</span><span class="r">tab completes · ↑ history</span></div>
+          <div class="scr" id="scr" role="log" aria-live="polite" aria-label="Shell output"></div>
+          <form autocomplete="off">
+            <span aria-hidden="true">sammy@ibeh:~/experience$</span><label for="cmd" class="sr">Shell command. Try ls, cat gds.md, or help</label><input
+              id="cmd"
+              spellcheck="false"
+              autocapitalize="off"
+            />
+          </form>
+        </div>
+        <div class="quick">
+          quick: <button type="button" data-cmd="ls">ls</button><button type="button" data-cmd="cat gds.md">cat gds.md</button><button
+            type="button"
+            data-cmd="cat *">cat *</button
+          ><button type="button" data-cmd="help">help</button><button type="button" data-cmd="clear">clear</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shell>

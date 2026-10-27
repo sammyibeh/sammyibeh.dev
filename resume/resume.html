@@ -1,0 +1,129 @@
+<!doctype html>
+<!-- Source for public/resume.pdf: `npm run resume`. A job-application document, so unlike the site it keeps full bullets and keyword lists for ATS.
+     Geometry is measured from the previous resume (US Letter, pt units): same margins, columns, section placement and
+     type scale. Only the styling is the site's: Paper palette, Inter + JetBrains Mono, the {▮} mark, a git rail in the margin.
+     Reading order for ATS: the four blocks are positioned in source order (name, contact, main, sidebar); nothing inside
+     them is positioned, and decorations are CSS/SVG, so they add no text. -->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Sammy Ibeh, Resume</title>
+<style>
+@font-face{font-family:Inter;src:url('{{pub}}fonts/inter-latin.woff2') format('woff2');font-weight:100 900}
+@font-face{font-family:Inter;src:url('{{pub}}fonts/inter-latin-ext.woff2') format('woff2');font-weight:100 900;unicode-range:U+0100-024F,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';src:url('{{pub}}fonts/jetbrains-mono-latin.woff2') format('woff2');font-weight:100 900}
+@page{size:595pt 842pt;margin:0} /* A4 */
+:root{--tx:#2d251d;--hi:#18120c;--mu:#6a5b4b;--ac:#a3500b;--ac2:#b4441b;--line:#e9dfcf;
+  --body:8pt;--lh:11.25pt;--gap:16pt} /* the original pitches; both columns end at the same bottom margin */
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;width:595pt;height:842pt;position:relative;background:#fff;color:var(--tx);font:400 var(--body)/var(--lh) Inter,sans-serif}
+h1,h2,h3,p,ul{margin:0}
+/* the four blocks: the original (US Letter) placement, scaled to A4 width; margins proportional */
+h1::before{content:'';position:absolute;left:-13px;top:9px;width:6px;height:26px;background:var(--ac2);border-radius:1px} /* cap height of the name */
+h1{position:absolute;left:30pt;top:27.8pt;font:800 27pt/34pt Inter,sans-serif;letter-spacing:-.02em;color:var(--hi)}
+.contact{position:absolute;left:414.8pt;top:27.6pt;width:163pt;padding:0;list-style:none;font:600 8pt/13.5pt 'JetBrains Mono',monospace;color:var(--tx)}
+main{position:absolute;left:30pt;top:72.4pt;width:369pt;height:741pt;display:flex;flex-direction:column}
+main section:last-child{flex:1;display:flex;flex-direction:column}
+aside{position:absolute;left:413.3pt;top:150.8pt;width:164.3pt;height:662.7pt;display:flex;flex-direction:column;justify-content:space-between;gap:12pt}
+/* contact rows: 13.5pt icon, then text, 25pt pitch */
+.contact li{display:flex;align-items:center;gap:9pt;height:13.5pt;margin-bottom:11.5pt}
+.contact svg{width:13.5pt;height:13.5pt;flex:none}
+.contact a{color:inherit;text-decoration:none}
+/* section headings: mono, amber, with a block cursor hanging in the margin */
+h2{font:700 10pt/13.5pt 'JetBrains Mono',monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--ac)}
+/* the spine: every mark is centred 10px left of the text edge (x = 22.5pt in the main column), on whole px */
+h2::before{content:'';float:left;width:6px;height:12px;margin:3px 0 0 -13px;background:var(--ac2);border-radius:1px}
+.summary{margin-top:11.5pt;line-height:9.75pt} /* the original summary pitch */
+main section+section{margin-top:14.3pt}
+main>*,.log>*,aside>*{flex-shrink:0} /* never squeeze text; overflow must show up in the checks */
+/* experience: git rail and commit dots in the left margin, so the text edge stays put */
+.log{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:14pt;margin-top:14.5pt;position:relative}
+/* whole px only (1px = .75pt): rail 2px centred on x=24px; dots 10px with a 2px stroke, centred on the rail and on the title's cap height */
+.log::before{content:'';position:absolute;left:-11px;width:2px;top:var(--rail-top,0);height:var(--rail-h,0);background:var(--line)}
+.role{position:relative}
+.role::before{content:'';position:absolute;left:-15px;top:3px;width:10px;height:10px;box-sizing:border-box;border-radius:50%;background:#fff;border:2px solid var(--ac)}
+.role:first-child::before{background:var(--ac)}
+h3{font:700 9pt/12pt Inter,sans-serif;color:var(--hi)}
+h3 b{font-weight:600;color:var(--ac)}
+.when{margin-top:3.5pt;font:400 8pt/9pt 'JetBrains Mono',monospace;color:var(--mu)}
+.pts{margin-top:9pt;padding:0;list-style:none}
+/* marker on the column edge, text and wraps on a 17px (12.75pt) hanging indent, as in the original */
+.pts li{padding-left:17px;text-indent:-17px}
+.pts li::before{content:'›';display:inline-block;width:17px;text-indent:0;color:var(--ac);font:700 8pt 'JetBrains Mono',monospace}
+/* sidebar */
+aside p{line-height:9.75pt} /* the original sidebar pitch */
+aside p{line-height:9.75pt} /* the original sidebar pitch */
+.str p+p{margin-top:3pt}.str b{font-weight:600;color:var(--hi)}
+.also{margin-top:4pt}.also b{font-weight:600;color:var(--hi)}
+aside h2+*{margin-top:14.5pt}
+aside h3+p{margin-top:2.5pt}
+aside .when+p{margin-top:4pt}
+aside p+h3,aside .item+.item{margin-top:9pt}
+</style>
+</head>
+<body>
+<h1>Sammy Ibeh</h1>
+
+<ul class="contact" aria-label="Contact">
+  <li><svg viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="#a3500b" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3.5" width="13" height="9.5" rx="1.5"/><path d="M2 4.5l6 4.5 6-4.5"/></g></svg><a href="mailto:hello@sammyibeh.com">hello@sammyibeh.com</a></li>
+  <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="2.5" fill="none" stroke="#a3500b" stroke-width="1.4"/><g fill="#a3500b"><rect x="4.4" y="6.6" width="1.6" height="5.2"/><circle cx="5.2" cy="4.7" r="1"/><path d="M7.4 6.6h1.5v.8c.4-.6 1-.95 1.85-.95 1.3 0 2 .8 2 2.3v3.05h-1.6V9.1c0-.8-.3-1.2-.95-1.2-.7 0-1.2.5-1.2 1.35v2.55H7.4z"/></g></svg><a href="https://linkedin.com/in/ibehsamuel">linkedin.com/in/ibehsamuel</a></li>
+  <li><svg viewBox="4 6 24 20" aria-hidden="true"><g fill="none" stroke="#a3500b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 6.5h-1.25a2.75 2.75 0 0 0-2.75 2.75v3.75a3 3 0 0 1-3 3 3 3 0 0 1 3 3v3.75a2.75 2.75 0 0 0 2.75 2.75h1.25"/><path d="M20.5 6.5h1.25a2.75 2.75 0 0 1 2.75 2.75v3.75a3 3 0 0 0 3 3 3 3 0 0 0-3 3v3.75a2.75 2.75 0 0 1-2.75 2.75h-1.25"/></g><rect x="13" y="10" width="6" height="12" rx=".75" fill="#b4441b"/></svg><a href="https://sammyibeh.dev">sammyibeh.dev</a></li>
+  <li><svg viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="#a3500b" stroke-width="1.4" stroke-linecap="round"><circle cx="4.5" cy="3.5" r="1.8"/><circle cx="4.5" cy="12.5" r="1.8"/><circle cx="11.5" cy="5.5" r="1.8"/><path d="M4.5 5.3v5.4M11.5 7.3c0 2.5-2.5 2.7-5.6 4.2"/></g></svg><a href="https://github.com/sammyibeh">github.com/sammyibeh</a></li>
+</ul>
+
+<main>
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">Senior developer at the Government Digital Service and former CTO, with extensive experience across full-stack web and mobile development. Committed to fostering collaboration, building cohesive teams and taking a solution-focused approach to hard problems. A polyglot who picks the right tool for the job rather than a fixed stack.</p>
+  </section>
+  <section>
+    <h2>Relevant Experience</h2>
+    <div class="log">
+      <div class="role"><h3>Senior Developer <b>@ Government Digital Service (GDS)</b></h3><p class="when">Jan 2024 – Present // London, UK</p>
+        <ul class="pts"><li>Building and maintaining cross-government digital services, including GOV.UK One Login</li></ul></div>
+      <div class="role"><h3>Senior Software Engineer | CTO <b>@ Vidor</b></h3><p class="when">Jun 2021 – Dec 2023 // Delaware, USA</p>
+        <ul class="pts"><li>Successfully architected, implemented, and shipped highly interactive customer-facing web and mobile applications</li><li>Developed and maintained robust and scalable backend systems for a high-traffic e-commerce platform, utilizing technologies such as JavaScript, Amplify, AWS AppSync, Serverless, and DynamoDB</li><li>Designed, developed, and implemented a RESTful API using Node.js and AWS Lambda, facilitating seamless communication between the mobile app and backend services</li><li>Analyzed and conducted regular code refactoring and performance optimizations, resulting in a 30% reduction in app loading times and enhanced overall app responsiveness</li><li>Managed a team of software engineers, facilitating agile methodologies for project success</li><li>Migrated infrastructure to the cloud, improving scalability and reducing costs by 20%</li></ul></div>
+      <div class="role"><h3>Senior Software Engineer | CTO <b>@ XOXI</b></h3><p class="when">Apr 2021 – Dec 2023 // London, UK</p>
+        <ul class="pts"><li>Led the development and implementation of a technology roadmap aligned with the company’s long-term goals</li><li>Collaborated with cross-functional teams to optimize business processes and improve operational efficiency</li></ul></div>
+      <div class="role"><h3>Lead, Software Engineer <b>@ Farmsby</b></h3><p class="when">Jul 2020 – Dec 2021 // Lagos, Nigeria</p>
+        <ul class="pts"><li>Migrated a legacy backend service from PHP to a modern stack using JavaScript (Node.js), PostgreSQL, and Python, resulting in a 40% improvement in response times</li><li>Collaborated with five engineers to refactor and rewrite critical components, ensuring a smooth transition without disrupting service availability</li><li>Engineered and maintained major features of Farmsby’s customer-facing web app using ES6, React Native, Backbone.js, Marionette, and CSS</li></ul></div>
+      <div class="role"><h3>Head, Information Technology <b>@ ITSync Synergy</b></h3><p class="when">Apr 2016 – Feb 2021 // Lagos, Nigeria</p>
+        <ul class="pts"><li>Developed on-demand web, mobile, and device software for sectors including banking, oil and gas, and medicine</li><li>Set up and implemented business management solutions for startups, NGOs, and multinationals</li><li>Built and scaled business systems and servers, including enterprise-grade services</li><li>Implemented agile methodologies to improve project delivery and collaboration between cross-functional teams</li></ul></div>
+      <div class="role"><h3>Software Engineer <b>@ Silicon South Technologies</b></h3><p class="when">Jan 2015 – Mar 2016 // Port Harcourt, Nigeria</p>
+        <ul class="pts"><li>Worked with various languages, frameworks, and content management systems such as JavaScript, WordPress, Drupal, Joomla, and Magento</li></ul></div>
+    </div>
+  </section>
+</main>
+
+<aside>
+  <section>
+    <h2>Skills</h2>
+    <div class="item str"><p><b>Engineering leadership</b> – led teams as CTO; agile delivery with cross-functional teams</p>
+      <p><b>Architecture &amp; cloud</b> – web and mobile apps, backend systems and cloud migration</p>
+      <p><b>Approach</b> – polyglot: the right tool for each job</p></div>
+    <div class="item"><h3>Programming Languages</h3><p>TypeScript, JavaScript, Python, Java, Kotlin, SQL, Ruby, GraphQL, HTML, CSS/Sass, PHP</p></div>
+    <div class="item"><h3>Libraries &amp; Frameworks</h3><p>React, Next.js, Node.js, Express, React Native, Ruby on Rails, Django, Flask, Vue.js, Redux, GOV.UK Design System, Jest, Playwright, Cypress</p></div>
+    <div class="item"><h3>Tools &amp; Platforms</h3><p>Amazon Web Services (AWS): Lambda, ECS Fargate, EC2, DynamoDB, AppSync, Serverless; AWS CDK, Terraform, Docker, Kubernetes, GitHub Actions, CI/CD, PostgreSQL, Git, webpack</p><p class="also"><b>Practices:</b> TDD, Microservices, Event-driven architecture, Infrastructure as Code, OpenID Connect (OIDC), OAuth 2.0, JWT, OWASP Top 10, WCAG 2.2 AA accessibility, Mentoring, Technical leadership, LLM integration, AI-assisted development</p></div>
+  </section>
+  <section>
+    <h2>Education</h2>
+    <div class="item"><h3>Federal University of Technology, Owerri</h3><p class="when">2010 – 2016 // Imo, Nigeria</p><p>BSc Chemistry</p></div>
+  </section>
+  <section>
+    <h2>Community Projects</h2>
+    <div class="item"><h3>Keeping it Real Foundation (KIR)</h3><p class="when">2015 – 2018 // Rivers, Nigeria</p>
+    <p>Trained people with disabilities, including deaf and mute people, in tech skills, from computer basics to programming.</p></div>
+  </section>
+  <section>
+    <h2>Interests</h2>
+    <p>Fitness, music, travelling, reading, hiking.</p>
+  </section>
+</aside>
+<script>/* rail from the first dot's centre to the last's; whole px so nothing anti-aliases */
+const log = document.querySelector('.log'), roles = [...log.querySelectorAll('.role')], y = e => e.getBoundingClientRect().top - log.getBoundingClientRect().top
+log.style.setProperty('--rail-top', Math.round(y(roles[0])) + 3 + 5 + 'px')
+log.style.setProperty('--rail-h', Math.round(y(roles.at(-1)) - y(roles[0])) + 'px')
+</script>
+</body>
+</html>

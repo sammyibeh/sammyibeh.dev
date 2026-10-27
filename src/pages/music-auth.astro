@@ -1,0 +1,67 @@
+---
+import Shell from '../layouts/Shell.astro'
+// Private: the owner signs in to Apple Music here so the home page can show what's playing. Unlinked and noindex.
+---
+
+<Shell page="music-auth" title="Apple Music sign-in" description="Private." noindex>
+  <section class="phead">
+    <div class="wrap">
+      <p class="prompt" aria-hidden="true">sammy@ibeh:~$ <b>./music-auth</b></p>
+      <h1>Apple Music sign-in</h1>
+      <p class="sub">For the site owner. Signs in with MusicKit and stores the token so the home page can show recent plays.</p>
+      <form id="ma" class="cform ma">
+        <div class="row">
+          <label for="ma-secret">Secret</label>
+          <input id="ma-secret" name="secret" type="password" autocomplete="current-password" required spellcheck="false" />
+        </div>
+        <div class="actions"><button class="btn" type="submit">Sign in to Apple Music</button></div>
+        <p id="ma-status" class="note" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</Shell>
+
+<script>
+  const form = document.getElementById('ma') as HTMLFormElement
+  const status = document.getElementById('ma-status')!
+  const say = (t: string) => (status.textContent = t)
+  const api = async (body: object) => {
+    const r = await fetch('/api/music-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    const out = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(out.error || `HTTP ${r.status}`)
+    return out
+  }
+  const loadMusicKit = () =>
+    new Promise<void>((resolve, reject) => {
+      if ((window as any).MusicKit) return resolve()
+      document.addEventListener('musickitloaded', () => resolve(), { once: true })
+      const s = document.createElement('script')
+      s.src = 'https://js-cdn.music.apple.com/musickit/v3/musickit.js'
+      s.onerror = () => reject(new Error('could not load MusicKit'))
+      document.head.append(s)
+    })
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault()
+    const secret = (form.elements.namedItem('secret') as HTMLInputElement).value
+    try {
+      say('checking the secret …')
+      const { token: developerToken } = await api({ secret, action: 'devtoken' })
+      form.reset() // the secret only lives in this closure from here on, not in the page MusicKit runs in
+      say('loading MusicKit …')
+      await loadMusicKit()
+      const MK = (window as any).MusicKit
+      await MK.configure({ developerToken, app: { name: 'sammyibeh.dev', build: '1' } })
+      say('waiting for Apple sign-in …')
+      const token = await MK.getInstance().authorize()
+      say('saving …')
+      const out = await api({ secret, action: 'store', token })
+      // the server has it now; don't leave MusicKit's copy of the user token in this browser
+      for (const s of [localStorage, sessionStorage])
+        Object.keys(s).filter(k => /^music\.|musickit|media-user-token/i.test(k)).forEach(k => s.removeItem(k))
+      say(`done. ${out.track ? `latest play: ${out.track}` : 'no recent plays yet.'}`)
+    } catch (err) {
+      say(`failed: ${(err as Error).message}`)
+    }
+  })
+</script>

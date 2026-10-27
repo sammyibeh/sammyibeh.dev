@@ -1,0 +1,81 @@
+---
+import { siteMetadata } from 'data/config'
+
+export interface Article {
+  title?: string
+  category?: string[]
+  tags?: string[]
+  date?: string
+}
+
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  article?: Article
+  noindex?: boolean
+}
+
+const { title, description, image, article = {}, noindex } = Astro.props
+const { siteUrl, twitterUsername, facebookAppID, name, subTitle } = siteMetadata
+
+// The canonical is always the trailing-slash URL, which is what Netlify redirects to and the sitemap lists.
+const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), siteUrl).href
+const pageTitle = title ? `${title} ${subTitle}` : siteMetadata.title
+const cleanDescription = (description || siteMetadata.description).replace(/<[^>]*>/g, '')
+// Share cards live in public/og/ (regenerate with scripts/assets.mjs); pages without their own use the default.
+const cards: Record<string, string> = { default: 'Sammy Ibeh', about: 'About me', experience: 'Where I’ve worked', contact: 'Get in touch' }
+const slug = Astro.url.pathname.split('/')[1]
+const card = slug in cards ? slug : 'default'
+const imageUrl = new URL(image || `/og/${card}.png`, siteUrl).href
+const imageAlt = `A terminal window reading “${cards[card]}”, with the {sammyibeh.dev} logo`
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${siteUrl}/#person`,
+      name: 'Sammy Ibeh',
+      url: `${siteUrl}/`,
+      jobTitle: 'Senior Developer',
+      worksFor: {
+        '@type': 'GovernmentOrganization',
+        name: 'Government Digital Service',
+        url: 'https://www.gov.uk/government/organisations/government-digital-service',
+      },
+      address: { '@type': 'PostalAddress', addressLocality: 'London', addressCountry: 'GB' },
+      sameAs: siteMetadata.sameAs,
+    },
+    { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: `${siteUrl}/`, name, inLanguage: 'en-GB', publisher: { '@id': `${siteUrl}/#person` } },
+  ],
+}
+---
+
+<title>{pageTitle}</title>
+{!noindex && <link rel="canonical" href={canonical} />}
+<meta name="description" content={cleanDescription} />
+<meta name="robots" content={noindex ? "noindex,nofollow" : "index,follow,noodp"} />
+<meta property="og:type" content={article.title ? 'article' : 'website'} />
+{!noindex && <meta property="og:url" content={canonical} />}
+<meta property="og:site_name" content={name} />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={cleanDescription} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+{article.category && <meta property="article:section" content={article.category.join(',')} />}
+{article.tags?.map(tag => <meta property="article:tag" content={tag} />)}
+{article.date && <meta property="article:published_time" content={article.date} />}
+<meta property="fb:app_id" content={facebookAppID} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={twitterUsername} />
+<meta name="twitter:creator" content={twitterUsername} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={cleanDescription} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />
+<link rel="author" href="/humans.txt" />
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

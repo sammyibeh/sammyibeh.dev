@@ -1,0 +1,88 @@
+---
+import Shell from '../layouts/Shell.astro'
+import { siteMetadata } from 'data/config'
+
+const { author } = siteMetadata
+// [label, href, handle]
+const links = [
+  ['email', `mailto:${author.email}`, author.email],
+  ['github', 'https://github.com/sammyibeh', 'sammyibeh'],
+  ['linkedin', 'https://linkedin.com/in/ibehsamuel', 'in/ibehsamuel'],
+  ['twitter', 'https://twitter.com/sammyiibeh', '@sammyiibeh'],
+  ['instagram', 'https://instagram.com/sammyibeh', '@sammyibeh'],
+]
+// [key, value, hidden on small screens so the page stays one screen]
+const fetch: [string, string, boolean?][] = [
+  ['OS', 'Human (1992 build)', true],
+  ['Host', 'London, UK'],
+  ['Role', 'Senior Developer · GDS'],
+  ['Uptime', `${new Date().getFullYear() - 2014} years of code`],
+  ['Shell', 'zsh, obviously', true],
+  ['Code', 'polyglot · right tool for the job'], // placeholder pending owner sign-off
+  ['Pets', 'Sully, black British Shorthair (admin privileges)'],
+  ['Kitchen', 'most evenings (Sully supervises)', true],
+  ['Music', 'always on', true],
+]
+---
+
+<Shell
+  page="about"
+  title="About"
+  description="About Sammy Ibeh: senior developer at the Government Digital Service, former CTO, based in London with a cat called Sully."
+>
+  <section class="about-hero glow-zone">
+    <div class="band" data-surface data-poly="0,100 100,100 100,0" aria-hidden="true"></div>
+    <div class="wrap about">
+      <div>
+        <p class="prompt" aria-hidden="true">sammy@ibeh:~$ <b>cat about.md</b></p>
+        <h1 aria-label="About me"><span class="num" aria-hidden="true">01.</span><span class="t" aria-hidden="true">About me</span></h1>
+        <p class="kicker">Inordinate tech savvy<span class="dot">.</span></p>
+        <p class="lede">Senior developer at the Government Digital Service, building cross-government digital services. Before that, a CTO: I built products and led the teams that shipped them.</p>
+        <h2 class="ls"><span class="dim" aria-hidden="true">$ </span>ls ~/links</h2>
+        <ul class="links">
+          {
+            links.map(([k, href, label]) => (
+              <li>
+                {href.startsWith('http') ? (
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    <span class="k">{k}</span> <span class="v">{label}</span>
+                    <span class="sr"> (opens in new tab)</span>
+                  </a>
+                ) : (
+                  <a href={href}>
+                    <span class="k">{k}</span> <span class="v">{label}</span>
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="panel rv fetch-panel" style="--i:2">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>sammy@ibeh: neofetch</span></div>
+        <div class="fetch rv">
+          <p class="who">sammy@ibeh</p>
+          <p class="sep" aria-hidden="true">----------</p>
+          <dl>
+            {
+              fetch.map(([k, v, opt], i) => (
+                <>
+                  <dt class={opt ? 'opt' : undefined} style={`--j:${i * 2}`}>{k}</dt>
+                  <dd class={opt ? 'opt' : undefined} style={`--j:${i * 2 + 1}`}>{v}</dd>
+                </>
+              ))
+            }
+            <dt style={`--j:${fetch.length * 2}`}>Side</dt>
+            <dd style={`--j:${fetch.length * 2 + 1}`}>building <a href="https://getrownd.com" target="_blank" rel="noopener noreferrer">Rownd<span class="sr"> (opens in new tab)</span></a></dd>
+            <dt style={`--j:${fetch.length * 2 + 2}`}>Local</dt>
+            <dd style={`--j:${fetch.length * 2 + 3}`} data-london>London</dd>
+          </dl>
+          <div class="sw" aria-hidden="true">
+            <i style="background:var(--bg3)"></i><i style="background:var(--line)"></i><i style="background:var(--mu)"></i><i
+              style="background:var(--ac)"></i><i style="background:var(--ac2)"></i><i style="background:var(--hi)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shell>

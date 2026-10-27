@@ -1,0 +1,341 @@
+/* =========================================================
+   sammyibeh.dev · "Shell"
+   Themes: dark = Night Lamp, light = Paper
+   ========================================================= */
+
+/* ---------- fonts: self-hosted variable Inter and JetBrains Mono (Google Fonts' latin + latin-ext subsets) ---------- */
+@font-face{font-family:"Inter";font-style:normal;font-weight:400 800;font-display:swap;src:url(/fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400 800;font-display:swap;src:url(/fonts/inter-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 800;font-display:swap;src:url(/fonts/jetbrains-mono-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 800;font-display:swap;src:url(/fonts/jetbrains-mono-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+
+/* ---------- themes ---------- */
+:root{--nav-h:64px;--radius:10px;--shadow:0 30px 60px -30px rgba(0,0,0,.55);--grid:color-mix(in srgb,var(--mu) 9%,transparent);--glow-hover:var(--glow)}
+/* Night Lamp (the dark theme): Lamplight's amber, ember and warm type on Brass's deeper ink.
+   AA on --bg #0c1220: tx 14.4:1, mu 7.3:1, ac 10.6:1, ac2 8.0:1, err 8.5:1 (mu on panels 6.7:1). Glow kept low and tight for the darker ground. */
+:root,[data-theme=dark]{
+  --bg:#0c1220;--bg2:#141c2d;--bg3:#080d17;--line:#242e42;--tx:#e8e1d4;--hi:#fff4e0;--mu:#a9a196;
+  --ac:#ffb547;--ac2:#ff8a5b;--band1:#ffc163;--band2:#ff7a45;--brace:#c79a63;
+  --hash:#ffcf87;--str:#f2d49b;--kw:#ff9e7a;--err:#ff8f80;--ok:#ffcf6e;
+  --glow:0 0 9px rgba(255,170,60,.22);--glow-hover:0 0 12px rgba(255,170,60,.3);--tone:dark;color-scheme:dark}
+/* Paper (the light theme): Night Lamp's amber/ember family in daylight. No red.
+   AA on --bg #fbf7f0: tx 14.1, mu 6.1, ac 5.3, ac2 5.2, brace 4.7, err 6.8, ok 5.7 (all :1). */
+[data-theme=light]{
+  --bg:#fbf7f0;--bg2:#ffffff;--bg3:#f4ede2;--line:#e9dfcf;--tx:#2d251d;--hi:#18120c;--mu:#6a5b4b;
+  --ac:#a3500b;--ac2:#b4441b;--band1:#ffd08a;--band2:#ff9d6c;--brace:#a35e1a;
+  --hash:#8a4a00;--str:#55651f;--kw:#9a3a1a;--err:#9a3412;--ok:#4f6b1f;
+  --glow:none;--glow-hover:none;--shadow:0 24px 50px -28px rgba(90,60,20,.22);--grid:rgba(106,91,75,.08);--tone:light;color-scheme:light}
+
+/* ---------- base ---------- */
+*{box-sizing:border-box}
+html{background:var(--bg);scrollbar-color:var(--line) transparent}
+html:not(.motion) *,html:not(.motion) *::before,html:not(.motion) *::after{animation:none!important;transition:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.65 Inter,system-ui,sans-serif;min-height:100svh;-webkit-font-smoothing:antialiased}
+a{color:var(--ac);text-underline-offset:3px}
+::selection{background:var(--ac);color:var(--bg)}
+.mono,code,pre,kbd{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1040px;margin:0 auto;padding:0 40px}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.skip-link{position:absolute;left:12px;top:-60px;z-index:200;background:var(--ac);color:var(--bg);padding:8px 14px;font:600 14px "JetBrains Mono",monospace;border-radius:4px}
+.skip-link:focus{top:12px}
+.cur{display:inline-block;width:.6em;height:1.1em;background:var(--ac);vertical-align:-.18em;margin-left:2px;opacity:0}
+/* JS shows the caret (.on) while typing, then .done: two blinks and a fade. Reduced motion or no JS: no caret. */
+.cur.on{opacity:1}
+.cur.done{animation:blink2 1.4s linear forwards}
+@keyframes blink2{0%,24%{opacity:1}25%,44%{opacity:0}45%,69%{opacity:1}70%,84%{opacity:0}85%{opacity:1}100%{opacity:0}}
+.cd .cur{opacity:1;animation:blink 1.05s steps(1) infinite}
+html:not(.motion) .cur{display:none}
+@keyframes blink{50%{opacity:0}}
+kbd{font:11px "JetBrains Mono",monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 6px;color:var(--hi);background:var(--bg2)}
+.slot{border-bottom:1px dotted var(--mu);color:var(--tx)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:30;height:var(--nav-h);background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);--sp:0}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--band1),var(--band2));transform:scaleX(var(--sp));transform-origin:left}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:100%;max-width:1240px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.logo{display:inline-flex;align-items:baseline;font:800 19px/1 "JetBrains Mono",monospace;text-decoration:none;color:var(--tx);white-space:nowrap;padding:6px 2px}
+.logo .br{color:var(--brace);font-weight:500;display:inline-block;transition:transform .25s cubic-bezier(.565,1.65,.765,.88),color .2s}
+.logo .br:first-child{margin-right:3px}.logo .br:last-child{margin-left:3px}
+.logo .n{color:var(--ac);font-weight:500}
+.logo .d{color:var(--tx)}.logo .r{color:var(--mu);font-weight:400}
+.logo .cur{height:.95em;width:.48em;vertical-align:-.12em;margin-left:1px}
+.logo:hover .br:first-child,.logo:focus-visible .br:first-child{transform:translateX(-5px)}
+.logo:hover .br:last-child,.logo:focus-visible .br:last-child{transform:translateX(5px)}
+.logo:hover .br,.logo:focus-visible .br{color:var(--ac)}
+.logo:hover .cur{background:var(--ac2)}
+.nav ol{display:flex;gap:4px;list-style:none;margin:0;padding:0;counter-reset:n;font:13px "JetBrains Mono",monospace}
+.nav li{counter-increment:n}
+.nav ol a{display:block;padding:6px 10px;border-radius:4px;color:var(--tx);text-decoration:none;position:relative;transition:background .2s}
+.nav ol a::before{content:"0" counter(n) ". ";color:var(--ac)}
+.nav ol a:hover{background:var(--bg2)}
+.nav ol a:hover::before,.nav ol a:focus-visible::before{content:"cd ";color:var(--ac2)}
+.nav ol a[aria-current=page]{color:var(--ac)}
+.nav ol a[aria-current=page]::after{content:"";position:absolute;left:10px;right:10px;bottom:1px;height:2px;background:var(--ac)}
+.nav .resume{border:1px solid var(--ac);color:var(--ac)!important}
+.nav .resume::before{content:none!important}
+/* theme switch */
+.tt{display:none}
+.js .tt{display:inline-flex}
+.tt{align-items:center;gap:8px;font:12px "JetBrains Mono",monospace;color:var(--tx);background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 4px;cursor:pointer}
+.tt .knob{position:relative;width:34px;height:20px;border-radius:99px;background:var(--bg3);border:1px solid var(--line)}
+.tt .knob::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--ac);transition:transform .3s cubic-bezier(.565,1.65,.765,.88);box-shadow:inset -4px -3px 0 0 var(--bg2)}
+.tt[aria-checked=false] .knob::after{transform:translateX(14px);box-shadow:none}
+.tt:hover{border-color:var(--ac)}
+
+/* ---------- email rail: the current site's plain vertical email + line, with per-segment adaptive colour ---------- */
+.rail{position:fixed;right:40px;bottom:0;z-index:20;width:40px;text-decoration:none}
+.rail .in{position:relative;display:block}
+.rail .lay{display:flex;flex-direction:column;align-items:center}
+.rail .t{font:12px/18px "JetBrains Mono",monospace;letter-spacing:.1em;writing-mode:vertical-rl;margin:20px auto;padding:10px;transition:transform .25s}
+.rail:hover .t,.rail:focus-visible .t{transform:translateY(-3px)}
+.rail .ln{display:block;width:1px;height:90px}
+.rail .lay.base{color:var(--rail-a)}.rail .lay.base .ln{background:var(--rail-a)}
+.rail:hover .lay.base,.rail:focus-visible .lay.base{color:var(--ac)}
+.rail .lay.alt{position:absolute;inset:0;color:var(--rail-b);clip-path:path('M0 0Z')}
+.rail .lay.alt .ln{background:var(--rail-b)}
+:root,[data-theme=dark]{--rail-a:#a8b2d1;--rail-b:#14100a}
+[data-theme=light]{--rail-a:#6a5b4b;--rail-b:#1f140a}
+@media (max-width:1200px){.rail{display:none}}
+
+/* ---------- glow zone (A's cursor-follow light; owner favourite) ---------- */
+.glow-zone{position:relative;isolation:isolate}
+.glow-zone::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(560px circle at var(--mx,72%) var(--my,30%),color-mix(in srgb,var(--ac) 12%,transparent),transparent 62%),
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/40px 40px;
+  -webkit-mask:linear-gradient(#000 70%,transparent);mask:linear-gradient(#000 70%,transparent)}
+
+/* ---------- the band (brand motif; also a surface the rail adapts to) ---------- */
+.band{position:absolute;left:0;right:0;bottom:0;height:var(--band-h,130px);clip-path:polygon(0 100%,100% 100%,100% 0);background:linear-gradient(90deg,var(--band1),var(--band2));z-index:-1;pointer-events:none}
+:root .band,[data-theme=dark] .band{--surface:light}
+[data-theme=light] .band{--surface:amber} /* not the page tone, so the rail flips to ink over it */
+.motion .hero .band{animation:band 1.1s cubic-bezier(.2,.7,.2,1) .9s both}
+.motion.booting .hero .band{animation-play-state:paused}
+@keyframes band{from{clip-path:polygon(0 100%,0 100%,0 100%)}}
+
+/* ---------- home: always exactly one screen ---------- */
+/* home, about and contact: exactly one screen */
+[data-page=home] body,[data-page=about] body,[data-page=contact] body{height:100svh;overflow:hidden}
+[data-page=home] main,[data-page=about] main,[data-page=contact] main{height:calc(100svh - var(--nav-h));overflow:hidden}
+[data-page=home] footer,[data-page=about] footer,[data-page=contact] footer{display:none}
+.hero{position:relative;height:100%;display:flex;align-items:center;padding:clamp(10px,3svh,40px) 0 clamp(70px,15svh,150px)}
+.hero .band{--band-h:clamp(70px,14svh,130px)}
+.prompt{font:14px "JetBrains Mono",monospace;color:var(--mu);margin:0 0 clamp(4px,1svh,10px)}
+.prompt b{color:var(--hi);font-weight:400}
+.greet{font:15px "JetBrains Mono",monospace;color:var(--ac);min-height:1.6em;margin:0}
+.name{font:800 clamp(38px,min(9.5vw,10.5svh),112px)/1 "JetBrains Mono",monospace;letter-spacing:-.04em;color:var(--hi);margin:clamp(4px,1.2svh,12px) 0 clamp(6px,1.4svh,14px)}
+.name .cur{height:.82em;width:.5em;vertical-align:-.04em;margin-left:.08em}
+.tag{font:800 clamp(21px,min(4.6vw,5.4svh),54px)/1.1 Inter,sans-serif;letter-spacing:-.025em;color:var(--mu);margin:0 0 clamp(8px,2svh,22px)}
+.tag .dot{color:var(--ac)}
+.lede{max-width:560px;color:var(--mu);margin:0;font-size:clamp(15px,2.1svh,17px)}
+.lede strong{color:var(--ac);font-weight:500}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:clamp(12px,3svh,30px)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:14px "JetBrains Mono",monospace;padding:12px 18px;border-radius:4px;text-decoration:none;border:1px solid var(--ac);color:var(--ac);background:transparent;cursor:pointer;transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s,background .2s}
+.btn:hover,.btn:focus-visible{transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--ac);background:color-mix(in srgb,var(--ac) 8%,transparent)}
+.btn.ghost{border-color:var(--line);color:var(--tx)}
+.btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--mu);box-shadow:3px 3px 0 var(--mu)}
+.hint{display:inline-flex;align-items:center;gap:8px;font:12px "JetBrains Mono",monospace;color:var(--mu);background:none;border:0;cursor:pointer;padding:4px}
+.hint:hover{color:var(--ac)}
+.status-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(12px,2.6svh,26px)}
+.pill{display:inline-flex;align-items:center;gap:10px;margin:0;font:13px "JetBrains Mono",monospace;color:var(--mu);border:1px solid var(--line);border-radius:99px;padding:5px 13px;background:color-mix(in srgb,var(--bg2) 70%,transparent)}
+.pill i.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}0%{box-shadow:0 0 0 0 var(--ok)}}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:11px}
+.eq i{width:2px;background:var(--ac);height:30%;animation:eq 1s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:-.4s}.eq i:nth-child(3){animation-delay:-.7s}
+@keyframes eq{to{height:100%}}
+.motion .stage>*{animation:up .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0)*1ms)}
+.motion.booting .stage>*{animation-play-state:paused}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+
+/* ---------- boot overlay ---------- */
+.boot{position:fixed;inset:0;z-index:80;background:var(--bg3);display:flex;align-items:center;justify-content:center;padding:24px}
+.boot pre{margin:0;font:13px/1.8 "JetBrains Mono",monospace;color:var(--mu);width:min(560px,100%);white-space:pre-wrap;min-height:13em}
+.boot pre .ok{color:var(--ac)}
+.boot button{position:absolute;right:24px;bottom:24px;font:12px "JetBrains Mono",monospace;background:none;color:var(--mu);border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer}
+.boot.out{animation:bootOut .5s cubic-bezier(.7,0,.3,1) forwards}
+@keyframes bootOut{to{clip-path:inset(0 0 100% 0)}}
+
+/* ---------- inner pages ---------- */
+.phead{padding:76px 0 52px;border-bottom:1px solid var(--line)}
+.phead h1{font:800 clamp(36px,6.4vw,72px)/1.05 "JetBrains Mono",monospace;letter-spacing:-.04em;margin:6px 0 14px;color:var(--hi)}
+.phead h1 .num{color:var(--ac);font-size:.38em;vertical-align:.9em;margin-right:.4em;font-weight:400;letter-spacing:0}
+.phead p.sub{color:var(--mu);max-width:620px;margin:0}
+main section{padding:60px 0}
+h2.h{display:flex;align-items:center;gap:14px;font:700 22px "JetBrains Mono",monospace;color:var(--hi);margin:0 0 24px}
+h2.h::before{content:"#";color:var(--ac)}
+h2.h::after{content:"";flex:1;max-width:280px;height:1px;background:var(--line)}
+.motion.arrive body::after{content:"";position:fixed;inset:0;z-index:90;background:var(--bg3);pointer-events:none;animation:lift .5s cubic-bezier(.7,0,.3,1) .05s both}
+@keyframes lift{to{clip-path:inset(0 0 100% 0)}}
+.motion.arrive main>*{animation:up .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*80ms + 250ms)}
+.cd{position:fixed;inset:0;z-index:95;background:var(--bg3);display:flex;align-items:center;justify-content:center;font:16px "JetBrains Mono",monospace;color:var(--mu);animation:cover .28s cubic-bezier(.7,0,.3,1) both}
+.cd p{margin:0;width:min(640px,90vw)}
+.cd b{color:var(--hi);font-weight:400}
+@keyframes cover{from{clip-path:inset(100% 0 0 0)}}
+.motion .rv{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+.motion .rv.in{opacity:1;transform:none}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.panel .bar{display:flex;align-items:center;gap:7px;padding:9px 14px;border-bottom:1px solid var(--line);font:12px "JetBrains Mono",monospace;color:var(--mu)}
+.panel .bar i{width:11px;height:11px;border-radius:50%;background:var(--line)}
+.panel .bar span{margin-left:8px}.panel .bar .r{margin-left:auto}
+
+/* about: a one-screen hero. Left: who + links. Right: neofetch. */
+.about-hero{height:100%;display:flex;align-items:center;padding:clamp(10px,3svh,40px) 0 clamp(60px,12svh,130px)}
+.about-hero .band{--band-h:clamp(56px,11svh,110px)}
+.about{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4.5vw,64px);align-items:center;width:100%}
+.about h1,.contact h1{font:800 clamp(34px,min(6.4vw,8svh),72px)/1.05 "JetBrains Mono",monospace;letter-spacing:-.04em;margin:clamp(2px,.8svh,8px) 0 clamp(4px,1svh,10px);color:var(--hi)}
+.about h1 .num,.contact h1 .num{color:var(--ac);font-size:.38em;vertical-align:.9em;margin-right:.4em;font-weight:400;letter-spacing:0}
+.kicker{font:800 clamp(19px,min(3.2vw,4svh),34px)/1.15 Inter,sans-serif;letter-spacing:-.02em;color:var(--mu);margin:0 0 clamp(6px,1.4svh,14px)}
+.kicker .dot{color:var(--ac)}
+.about .lede{max-width:470px}
+h2.ls{font:700 14px "JetBrains Mono",monospace;color:var(--hi);margin:clamp(14px,3.2svh,32px) 0 clamp(2px,.6svh,6px)}
+h2.ls .dim{color:var(--ac)}
+.fetch{padding:clamp(14px,2.4svh,22px);font:clamp(12px,1.8svh,13.5px)/1.7 "JetBrains Mono",monospace}
+.fetch .who{margin:0;color:var(--ac)}.fetch .sep{margin:0 0 4px;color:var(--line)}
+.fetch dl{display:grid;grid-template-columns:auto 1fr;gap:0 14px;margin:0}
+.fetch dt{color:var(--ac);font-weight:700}.fetch dd{margin:0;color:var(--tx)}
+.motion .fetch.rv dl>*{opacity:0;transition:opacity .08s;transition-delay:calc(var(--j)*45ms + 200ms)}
+.motion .fetch.rv.in dl>*{opacity:1}
+.sw{display:flex;margin-top:12px}.sw i{width:26px;height:14px}
+.links{list-style:none;margin:0;padding:0;font:14px "JetBrains Mono",monospace}
+.links li{padding:clamp(4px,1.05svh,10px) 0;border-bottom:1px dashed var(--line);min-width:0}
+.links a{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:baseline;text-decoration:none}
+.links .k{color:var(--mu)}
+.links .v{text-decoration:underline;text-underline-offset:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.links a:hover .k,.links a:focus-visible .k{color:var(--ac)}
+
+/* experience */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:28px;font:14px "JetBrains Mono",monospace;align-items:center}
+.tabs button{font:inherit;color:var(--mu);background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;margin-bottom:-1px;cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ac);border-color:var(--ac)}
+.log{position:relative;padding-left:34px;font:14px "JetBrains Mono",monospace}
+.log::before{content:"";position:absolute;left:9px;top:10px;bottom:10px;width:2px;background:linear-gradient(var(--ac),var(--band2));transform-origin:top}
+.motion .log.rv::before{transform:scaleY(0);transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.motion .log.rv.in::before{transform:scaleY(1)}
+.log details{position:relative;margin:0 0 12px;scroll-margin-top:90px}
+.log details::before{content:"";position:absolute;left:-32px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ac)}
+.log details[open]::before{background:var(--ac);box-shadow:0 0 0 5px color-mix(in srgb,var(--ac) 18%,transparent)}
+.log summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:4px 10px;padding:7px 10px;border-radius:6px;transition:background .2s}
+.log summary::-webkit-details-marker{display:none}
+.log summary:hover{background:var(--bg2)}
+.log .hash{color:var(--hash)}.log .ref{color:var(--ac)}.log .msg{color:var(--hi)}.log .when{color:var(--mu);margin-left:auto}
+.log .body{padding:8px 12px 4px;color:var(--mu);border-left:1px dashed var(--line);margin-left:10px}
+.motion .log details[open] .body{animation:drop .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}}
+.log .body ul{list-style:none;padding:0;margin:8px 0}
+.log .body li{font:15px/1.6 Inter,sans-serif;color:var(--tx);padding-left:1.4em;text-indent:-1.4em;margin:4px 0}
+.log .body li::before{content:"+ ";color:var(--str);font-family:"JetBrains Mono",monospace}
+.log .stat{color:var(--mu);font-size:12px}.log .stat b{color:var(--str);font-weight:400}
+.note{font:13px "JetBrains Mono",monospace;color:var(--mu);margin-top:14px}
+
+/* shells (experience CLI + global terminal) */
+.cli .scr,.qt .scr{font:14px/1.7 "JetBrains Mono",monospace}
+.cli .scr{padding:16px 18px;height:420px;overflow:auto}
+.scr p{margin:0;white-space:pre-wrap}
+.scr .dim{color:var(--mu)}.scr .hi{color:var(--ac)}
+.scr h4{margin:.6em 0 0;color:var(--hi);font-size:1em}
+.files{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0;padding:0;list-style:none}
+button.f,.quick button{font:inherit;color:var(--ac);background:none;border:0;padding:0 2px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+button.f:hover,button.f:focus-visible,.quick button:hover,.quick button:focus-visible{background:var(--ac);color:var(--bg);text-decoration:none;outline:none}
+.cli form{display:flex;gap:1ch;padding:10px 18px 14px;border-top:1px dashed var(--line);font:14px "JetBrains Mono",monospace;color:var(--mu)}
+.cli form:focus-within{background:var(--bg3)}
+.cli input,.qt input{flex:1;min-width:0;font:inherit;color:var(--hi);background:transparent;border:0;outline:none;caret-color:var(--ac)}
+.quick{display:flex;flex-wrap:wrap;gap:6px 14px;margin:12px 0 0;font:13px "JetBrains Mono",monospace;color:var(--mu)}
+.blame{display:grid;grid-template-columns:auto auto 1fr;gap:0 14px}
+.blame .h{color:var(--hash)}.blame .a{color:var(--mu)}
+.qt{position:fixed;left:0;right:0;top:0;z-index:120;background:color-mix(in srgb,var(--bg3) 96%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--ac);box-shadow:0 20px 60px rgba(0,0,0,.4);font:14px/1.7 "JetBrains Mono",monospace;transform:translateY(-105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.qt.open{transform:none;visibility:visible}
+.qt .inner{max-width:1040px;margin:0 auto;padding:12px 40px 16px}
+.qt .head{display:flex;justify-content:space-between;color:var(--mu);font-size:12px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.qt .scr{max-height:min(46vh,420px);overflow:auto;padding:10px 0}
+.qt form{display:flex;gap:1ch;color:var(--mu)}
+
+/* ---------- contact: a guided CLI session on top of a plain form ---------- */
+.session{font:15px/1.75 "JetBrains Mono",monospace;padding:20px 22px 22px}
+.session .log2 p{margin:0;white-space:pre-wrap}
+.session .log2 .dim{color:var(--mu)}.session .log2 .ok{color:var(--ok)}.session .log2 .bad{color:var(--err)}.session .log2 .hi{color:var(--ac)}
+.cform{margin:0}
+.cform .row{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 1ch;padding:.3em .55em;border-radius:4px;margin:2px 0}
+.cform label{color:var(--hi);white-space:nowrap}
+.cform label .pr{color:var(--ok)}
+.cform label .opt{color:var(--mu)}
+.cform input,.cform textarea{flex:1 1 14ch;min-width:0;font:inherit;color:var(--ac);background:transparent;border:0;border-bottom:1px dashed var(--line);padding:0 0 1px;outline:none;resize:none;caret-color:var(--ac);field-sizing:content;min-height:1.6em}
+.cform textarea{flex-basis:100%;min-height:3lh}
+.cform ::placeholder{color:var(--mu);opacity:.55}
+.cform .row:focus-within{background:color-mix(in srgb,var(--ac) 7%,transparent);box-shadow:inset 2px 0 0 var(--ac)}
+.cform .err{flex-basis:100%;font-size:.85em;color:var(--err)}
+.cform .err:empty{display:none}
+.cform .hint2{flex-basis:100%;font-size:12px;color:var(--mu)}
+.cform .actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}
+.cform .actions small{color:var(--mu);font-size:12px}
+.ctrl{font:12px "JetBrains Mono",monospace;color:var(--mu);background:none;border:1px solid var(--line);border-radius:4px;padding:5px 10px;cursor:pointer}
+.ctrl:hover,.ctrl:focus-visible{color:var(--ac);border-color:var(--ac)}
+/* flow mode (JS on): one prompt at a time */
+.cform.flow .row:not(.reached),.cform.flow .actions:not(.reached){display:none}
+.cform.flow .row.done input,.cform.flow .row.done textarea{border-bottom-color:transparent;color:var(--tx)}
+.cform.flow .row.done label .pr{color:var(--ok)}
+.cform.flow .row.done label .pr::before{content:"✔";}
+.cform.flow .row.done label .pr span{display:none}
+.cform:not(.flow) .flow-only{display:none}
+.cform.flow .noflow{display:none}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+/* one screen: the session scrolls inside its panel, never the page */
+.contact-hero{height:100%;padding:clamp(14px,4svh,48px) 0 clamp(14px,3svh,36px)}
+.contact{height:100%;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto minmax(0,max-content);align-content:start;gap:clamp(10px,2.4svh,24px) 44px;align-items:start}
+.contact .head{grid-column:1/-1}.contact .head .prompt{margin:0}
+.contact .panel{display:flex;flex-direction:column;max-height:100%}
+.contact .session{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+.contact .side h2.h{margin-bottom:8px}
+.channels{list-style:none;margin:0;padding:0}
+.channels li{border-bottom:1px dashed var(--line);padding:14px 0}
+.channels small{display:block;font:12px "JetBrains Mono",monospace;color:var(--mu)}
+.channels a,.channels span.v{font:15px "JetBrains Mono",monospace}
+
+/* ---------- footer ---------- */
+footer{position:relative;border-top:1px solid var(--line);padding:30px 0 150px;font:13px "JetBrains Mono",monospace;color:var(--mu);isolation:isolate;overflow:hidden}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--mu)}
+footer .band{--band-h:210px;opacity:.95}
+footer{padding-bottom:230px}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;top:84px;z-index:130;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--ac);color:var(--hi);font:13px "JetBrains Mono",monospace;padding:10px 16px;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.3);animation:toast 4s both}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-10px)}8%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.e404 .big{font:800 clamp(90px,20vw,220px)/.9 "JetBrains Mono",monospace;letter-spacing:-.06em;color:var(--hi);margin:10px 0 0}
+.e404 .errl{font:15px "JetBrains Mono",monospace;color:var(--err)}
+.e404 .sugg{font:14px "JetBrains Mono",monospace;color:var(--mu);margin-top:26px}
+.e404 .sugg a{margin-right:16px}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){  .contact{grid-template-columns:1fr;grid-template-rows:auto minmax(0,max-content) auto}.contact .head{grid-column:auto}
+  .contact .side h2.h{display:none}.channels{display:flex;flex-wrap:wrap;gap:4px 18px}.channels li{border:0;padding:0}.channels small{display:inline;margin-right:6px}
+  .session{padding:14px 16px;font-size:14px}
+  .about{grid-template-columns:1fr;gap:clamp(12px,2.4svh,24px)}.fetch .who,.fetch .sep,.fetch .sw,.fetch .opt{display:none}
+  .fetch-panel .bar{padding:6px 12px}.fetch{padding:10px 14px;line-height:1.55}h2.ls{margin-top:clamp(8px,2svh,20px)}
+  .links{display:flex;flex-wrap:wrap;gap:4px 16px}.links li{border:0}.links .v{display:none}.links a{display:inline}.links .k{color:var(--ac);text-decoration:underline;text-underline-offset:3px}}
+@media (max-width:900px) and (max-height:700px){.fetch-panel{display:none}}
+@media (max-width:760px){
+  :root{--nav-h:96px}
+  .wrap{padding:0 20px}
+  .nav .wrap{flex-wrap:wrap;padding-block:8px;gap:6px 10px;align-content:center}
+  .nav-right{display:contents}.nav nav{order:3;width:100%}.tt{margin-left:auto}
+  .nav ol{gap:0;overflow-x:auto;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent)}
+  .nav ol a{padding:6px 8px}.nav ol a::before{content:none}
+  .logo{font-size:16px}
+  .tt .lbl{display:none}.tt{padding:4px}
+  .qt .inner{padding:10px 18px}
+  .ctas .btn{padding:10px 14px;font-size:13px}
+}
+@media (max-height:700px){.status-row .pill.music{display:none}}
+@media (max-width:420px){.status-row .pill.music{display:none}.ctas .hint{display:none}}
+
+/* theme switch: the new theme is revealed as a circle growing from the toggle */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:themeReveal .6s cubic-bezier(.2,.7,.2,1)}
+@keyframes themeReveal{from{clip-path:circle(0 at var(--vx,100%) var(--vy,0))}to{clip-path:circle(150vmax at var(--vx,100%) var(--vy,0))}}
+
+/* controls that only work with JS (tabs, terminal) are hidden without it */
+html:not(.js) .tabs,html:not(.js) [data-open-terminal],html:not(.js) .js-only{display:none}
+.pill[hidden]{display:none}
+.pill .np-t,.pill .np-t a{color:var(--tx)}

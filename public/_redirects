@@ -1,0 +1,24 @@
+# Redirects from what the browser requests to what we serve
+
+# Old page paths
+/now            /about/        301!
+/now/           /about/        301!
+/en_ng/about    /about/        301!
+/en/about       /about/        301!
+/cv             /resume.pdf    301!
+/resume         /resume.pdf    301!
+
+/experiments     https://github.com/sammyibeh       301!
+/experiment/*    https://github.com/sammyibeh       301!
+/open-source     https://github.com/sammyibeh       301!
+/lab             https://github.com/sammyibeh       301!
+
+# The old portfolio and project pages
+/portfolio      /experience/   301!
+/portfolio/*    /experience/   301!
+/projects       /experience/   301!
+/projects/*     /experience/   301!
+/project/*      /experience/   301!
+
+# Gatsby served the sitemap at /sitemap.xml; Astro writes /sitemap-index.xml
+/sitemap.xml   /sitemap-index.xml   301!

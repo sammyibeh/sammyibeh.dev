@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- {▮}: the logo's braces around its block cursor. Night Lamp in dark, Paper in light. -->
+  <style>
+    .bg { fill: #0c1220 } .br { stroke: #ffb547 } .cu { fill: #ff8a5b }
+    @media (prefers-color-scheme: light) { .bg { fill: #fbf7f0 } .br { stroke: #a3500b } .cu { fill: #b4441b } }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <g class="br" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path id="b" d="M11.5 6.5h-1.25a2.75 2.75 0 0 0-2.75 2.75v3.75a3 3 0 0 1-3 3 3 3 0 0 1 3 3v3.75a2.75 2.75 0 0 0 2.75 2.75h1.25"/>
+    <use href="#b" transform="matrix(-1 0 0 1 32 0)"/>
+  </g>
+  <rect class="cu" x="13" y="10" width="6" height="12" rx=".75"/>
+</svg>

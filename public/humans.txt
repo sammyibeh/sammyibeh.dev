@@ -1,0 +1,13 @@
+/* TEAM */
+  Developer: Sammy Ibeh
+  Role: Senior Developer, Government Digital Service
+  Contact: hello@sammyibeh.com
+  Twitter: @sammyiibeh
+  Location: London, UK
+
+/* SITE */
+  Language: English (en-GB)
+  Standards: HTML5, CSS3
+  Components: Astro, TypeScript
+  Fonts: Inter, JetBrains Mono
+  Hosting: Netlify, behind Cloudflare

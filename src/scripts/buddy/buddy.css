@@ -1,0 +1,113 @@
+/* =========================================================
+   Buddy + Sully, round 6. 2D cel style: flat colour, one ink weight.
+   JS drives the rig (root, head, arms, headphones, bar) through SVG transform attributes every frame;
+   CSS only tweens props in and out and swaps faces. Reduced motion: no transitions, still poses.
+   ========================================================= */
+.buddy{position:fixed;left:14px;bottom:0;z-index:96;width:132px;--skin:#8d5524;--hair:#1a1210;--ink:#21140c;--tee-ink:#fff1dc;
+  --shirt:#d4683a;--shirt-sh:#a94a26;--skin-sh:color-mix(in srgb,var(--skin) 74%,#1b0d06);--hair-hi:color-mix(in srgb,var(--hair) 70%,#7a6a62);
+  --apron:#f3e6cf;--apron-sh:#c2ab88;--cat-rim:#55555f;--ease:cubic-bezier(.34,1.3,.5,1);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+/* dark theme: a hairline of lamplight keeps the dark ink silhouette off the navy ground */
+[data-theme=dark] .buddy,:root:not([data-theme]) .buddy{--cat-rim:color-mix(in srgb,var(--ac) 55%,#16161b)}
+[data-theme=dark] .buddy svg.b,:root:not([data-theme]) .buddy svg.b{filter:drop-shadow(0 0 .7px rgba(255,214,160,.7))}
+.peek{--cat-rim:#55555f}
+[data-theme=dark] .peek{--cat-rim:color-mix(in srgb,var(--ac) 55%,#16161b)}
+.buddy .ol{stroke:var(--ink);stroke-width:1.8px;stroke-linejoin:round}
+.buddy .hd{stroke-width:2.2px}
+.buddy.big{width:340px}
+.buddy.tucked{transform:translateY(110%)}
+.buddy .hit{display:block;width:100%;padding:0;margin:0;border:0;background:none;cursor:pointer;border-radius:50% 50% 0 0}
+.buddy .hit:focus-visible{outline:2px solid var(--ac);outline-offset:-4px}
+.buddy svg.b{display:block;width:100%;height:auto;overflow:visible}
+.buddy .tuck{position:absolute;top:8px;right:-6px;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--bg2);color:var(--mu);font:12px/1 "JetBrains Mono",monospace;cursor:pointer;opacity:0;transition:opacity .2s}
+.buddy:hover .tuck,.buddy:focus-within .tuck{opacity:1}
+.peek{position:fixed;left:14px;bottom:0;z-index:96;width:64px;padding:0;border:0;background:none;cursor:pointer;transform:translateY(100%);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.peek.show{transform:none}
+.peek svg{display:block;width:100%}
+.bubble{position:absolute;left:58%;bottom:92%;min-width:150px;max-width:230px;padding:8px 11px;border-radius:10px 10px 10px 2px;background:var(--bg2);border:1px solid var(--line);color:var(--hi);font:12px/1.4 "JetBrains Mono",monospace;box-shadow:var(--shadow);opacity:0;transform:translateY(6px) scale(.96);transform-origin:0 100%;transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.bubble.on{opacity:1;transform:none}
+
+/* ---------- eyes: the lid slides down; its edge doubles as the closed-eye line ---------- */
+.lid{transform:translateY(calc(var(--lid,0) * 13px));transition:transform .2s ease}
+.buddy.blink .lid{--lid:1!important;transition-duration:.06s}
+.buddy[data-eyes=half]{--lid:.5}.buddy[data-eyes=down]{--lid:.3}.buddy[data-eyes=closed]{--lid:1}
+.buddy[data-loop=curl],.buddy[data-loop=press]{--lid:.42}
+.eye-happy,.eye-shut{display:none}
+.buddy[data-eyes=closed] .eye-open{display:none}.buddy[data-eyes=closed]:not([data-loop=music]) .eye-shut{display:inline}
+.buddy[data-ex=happy] .eye-open,.buddy[data-loop=flex] .eye-open,.buddy[data-loop=music] .eye-open{display:none}
+.buddy[data-ex=happy] .eye-happy,.buddy[data-loop=flex] .eye-happy,.buddy[data-loop=music] .eye-happy{display:inline}
+.buddy[data-ex=taste]{--lid:.55}
+.brow-l,.brow-r{transform-box:fill-box;transition:transform .22s}
+.brow-l{transform-origin:100% 50%}.brow-r{transform-origin:0% 50%}
+.brows{transition:transform .22s}
+.buddy[data-ex=wince] .brow-l,.buddy[data-loop=curl] .brow-l,.buddy[data-loop=press] .brow-l{transform:rotate(10deg)}
+.buddy[data-ex=wince] .brow-r,.buddy[data-loop=curl] .brow-r,.buddy[data-loop=press] .brow-r{transform:rotate(-10deg)}
+.buddy[data-loop=music] .brow-l,.buddy[data-loop=sleep] .brow-l{transform:rotate(-6deg)}.buddy[data-loop=music] .brow-r,.buddy[data-loop=sleep] .brow-r{transform:rotate(6deg)}
+.buddy[data-loop=curl] .brows,.buddy[data-loop=press] .brows{transform:translateY(1.6px)}
+.buddy[data-loop=typing] .brows{transform:translateY(.8px)}
+.buddy[data-ex=surprised] .brows{transform:translateY(-3.5px)}
+
+/* ---------- likeness ---------- */
+.hair-fade,.hair-curls,.hair-locs,.hair-buzz,.beard-stubble,.beard-full,.glasses{display:none}
+.buddy[data-hair=fade] .hair-fade,.buddy[data-hair=curls] .hair-curls,.buddy[data-hair=locs] .hair-locs,.buddy[data-hair=buzz] .hair-buzz,
+.buddy[data-beard=stubble] .beard-stubble,.buddy[data-beard=full] .beard-full,.buddy[data-glasses=on] .glasses{display:inline}
+
+/* ---------- props: always in the DOM, tweened in and out ---------- */
+.laptop{transform:translateY(46px);opacity:0;transition:transform .45s cubic-bezier(.3,.7,.2,1),opacity .3s}
+.buddy[data-laptop=up] .laptop,.buddy[data-laptop=open] .laptop{transform:none;opacity:1}
+.lap-lid{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.07);transition:transform .45s cubic-bezier(.3,.7,.2,1)}
+.buddy[data-laptop=open] .lap-lid{transform:none}
+.glyphs{opacity:0;transition:opacity .3s}.buddy[data-loop=typing] .glyphs{opacity:1}
+.notes{opacity:0;transition:opacity .4s}.buddy[data-loop=music] .notes{opacity:1}
+.db{display:none}.buddy[data-db=on] .db{display:inline}
+.bar{display:none}.buddy[data-bar=on] .bar{display:inline}
+.spoon{opacity:0;transition:opacity .25s}.buddy[data-spoon=on] .spoon{opacity:1}
+.bicep{display:none}.buddy[data-al=flex] .bicep{display:inline}
+.apron{opacity:0;transform:translateY(-34px);transition:transform .55s var(--ease),opacity .35s}.buddy[data-apron=on] .apron{opacity:1;transform:none}
+.buddy[data-apron=on] .tee-logo{opacity:0}.tee-logo{transition:opacity .3s}
+.pan{transform:translateY(40px);opacity:0;transition:transform .5s var(--ease),opacity .3s}.buddy[data-pan=up] .pan{transform:none;opacity:1}
+.steam{opacity:0;transition:opacity .5s}.buddy[data-loop=cook] .steam{opacity:.55}
+.headband{opacity:0;transform:translateY(-14px);transition:transform .45s var(--ease),opacity .35s}
+.buddy[data-band=on] .headband{opacity:1;transform:none}
+.sweat{opacity:0;transition:opacity .3s}.buddy[data-loop=curl] .sweat,.buddy[data-loop=press] .sweat{opacity:1}
+.zzz{opacity:0;transition:opacity .6s}.buddy[data-loop=sleep] .zzz{opacity:1}
+
+/* ---------- mouths ---------- */
+.m{opacity:0;transition:opacity .15s}.m-smile{opacity:1}
+.cheek{opacity:var(--blush,0);transition:opacity .3s}
+.buddy[data-loop=wave],.buddy[data-loop=flex],.buddy[data-ex=happy]{--blush:.4}
+.buddy[data-loop=wave] .m-smile,.buddy[data-loop=flex] .m-smile,.buddy[data-ex=happy] .m-smile{opacity:0}
+.buddy[data-loop=wave] .m-grin,.buddy[data-loop=flex] .m-grin,.buddy[data-ex=happy] .m-grin{opacity:1}
+.buddy[data-loop=typing] .m-smile{opacity:0}.buddy[data-loop=typing] .m-flat{opacity:1}
+.buddy[data-loop=music] .m-smile,.buddy[data-loop=cook] .m-smile{opacity:0}.buddy[data-loop=music] .m-hum,.buddy[data-loop=cook] .m-hum{opacity:1}
+.buddy[data-loop=curl] .m-smile,.buddy[data-loop=press] .m-smile{opacity:0}
+.buddy[data-loop=curl] .m-strain,.buddy[data-loop=press] .m-strain{opacity:1}
+.buddy[data-loop=sleep] .m-smile{opacity:0}.buddy[data-loop=sleep] .m-o{opacity:.8}
+.buddy[data-ex]:not([data-ex=""]) .m-hum{opacity:0}
+.buddy[data-ex=surprised] .m,.buddy[data-ex=taste] .m,.buddy[data-ex=wince] .m{opacity:0}
+.buddy[data-ex=surprised] .m-o,.buddy[data-ex=taste] .m-o{opacity:1}.buddy[data-ex=wince] .m-flat{opacity:1}
+
+.motion .buddy .steam path{animation:steam 2.2s ease-in-out infinite;transform-box:fill-box}.motion .buddy .steam path:nth-child(2){animation-delay:-.7s}.motion .buddy .steam path:nth-child(3){animation-delay:-1.4s}
+@keyframes steam{0%{transform:translateY(6px) scaleY(.8);opacity:0}40%{opacity:1}100%{transform:translateY(-8px) scaleY(1.1);opacity:0}}
+.motion .buddy .glyphs text,.motion .buddy .notes text,.motion .buddy .zzz text{transform-box:fill-box}
+.motion .buddy .glyphs text{animation:rise 1.8s ease-out infinite}
+.motion .buddy .glyphs text:nth-child(2){animation-delay:-.45s}.motion .buddy .glyphs text:nth-child(3){animation-delay:-.9s}.motion .buddy .glyphs text:nth-child(4){animation-delay:-1.35s}
+@keyframes rise{from{transform:translateY(8px);opacity:0}30%{opacity:1}to{transform:translateY(-22px);opacity:0}}
+.motion .buddy .notes text{animation:rise 2.4s ease-out infinite}.motion .buddy .notes text:nth-child(2){animation-delay:-1.2s}
+.motion .buddy .zzz text{animation:rise 2.6s ease-out infinite}
+.motion .buddy .zzz text:nth-child(2){animation-delay:-.9s}.motion .buddy .zzz text:nth-child(3){animation-delay:-1.8s}
+.motion .buddy .sweat{animation:drip 1.8s ease-in infinite;transform-box:fill-box}
+@keyframes drip{0%,40%{transform:none}100%{transform:translateY(10px)}}
+
+/* ---------- Sully: position, walk cycle, tail, hops and twitches are driven by the rig in avatar.js ---------- */
+.cat{position:absolute;bottom:0;left:74%;width:46%;pointer-events:none;visibility:hidden;transform-origin:50% 100%}
+.buddy:not([data-cpose=none]) .cat{visibility:visible}
+.cat svg{display:block;width:100%;height:auto;overflow:visible}
+.c-sit,.c-loaf,.c-walk,.c-stretch{opacity:0;transition:opacity .16s}
+.buddy[data-cpose=sit] .c-sit,.buddy[data-cpose=loaf] .c-loaf,.buddy[data-cpose=walk] .c-walk,.buddy[data-cpose=stretch] .c-stretch{opacity:1}
+
+@media (max-width:760px){
+  .buddy{left:auto;right:6px;width:92px}
+  .peek{left:auto;right:6px}
+  .bubble{left:auto;right:40%;border-radius:10px 10px 2px 10px;transform-origin:100% 100%}
+  .cat{left:-40%}
+}

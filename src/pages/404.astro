@@ -1,0 +1,19 @@
+---
+import Shell from '../layouts/Shell.astro'
+---
+
+<Shell page="notfound" title="404" description="cd: no such file or directory." noindex>
+  <section class="phead glow-zone e404">
+    <div class="wrap">
+      <p class="prompt" aria-hidden="true">sammy@ibeh:~$ <b>cd ~/<span id="missing">that-page</span></b></p>
+      <h1 class="big" aria-label="404, page not found">404</h1>
+      <p class="errl">cd: no such file or directory</p>
+      <p class="sugg">
+        did you mean: <a href="/">~/</a><a href="/about/">~/about</a><a href="/experience/">~/experience</a><a
+          href="/contact/">~/contact</a
+        >
+      </p>
+      <div class="ctas"><a class="btn" href="/">cd ~</a><button class="btn ghost" type="button" data-open-terminal>open a terminal</button></div>
+    </div>
+  </section>
+</Shell>

@@ -1,0 +1,4 @@
+Contact: mailto:hello@sammyibeh.com
+Expires: 2027-10-27T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://sammyibeh.dev/.well-known/security.txt

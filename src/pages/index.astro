@@ -1,0 +1,38 @@
+---
+import Shell from '../layouts/Shell.astro'
+---
+
+<Shell page="home">
+  <section class="hero glow-zone">
+    <div class="band" data-surface data-poly="0,100 100,100 100,0" aria-hidden="true"></div>
+    <div class="wrap stage">
+      <p class="prompt" style="--d:0" aria-hidden="true">sammy@ibeh:~$ <b>whoami</b></p>
+      <p class="greet" style="--d:120">
+        <span class="sr">Hello, my name is</span><span id="greet" aria-hidden="true">Hello, my name is</span><span class="cur" aria-hidden="true"></span>
+      </p>
+      <h1 class="name" style="--d:200" aria-label="Sammy Ibeh">
+        <span id="name" aria-hidden="true">Sammy Ibeh</span><span class="cur" aria-hidden="true"></span>
+      </h1>
+      <p class="tag" style="--d:420">I turn ideas into beautiful products<span class="dot">.</span></p>
+      <p class="lede" style="--d:560">
+        <strong>Senior developer</strong> at the Government Digital Service, building cross-government digital services.
+      </p>
+      <div class="ctas" style="--d:700">
+        <a class="btn" href="/contact/">./say-hello.sh</a><a class="btn ghost" href="/experience/">cd ~/experience</a><button
+          class="hint"
+          type="button"
+          data-open-terminal
+          aria-label="Open the terminal"><kbd>/</kbd></button
+        >
+      </div>
+      <div class="status-row" style="--d:840">
+        <p class="pill"><i class="dot" aria-hidden="true"></i>Senior Developer @ GDS</p>
+        <p class="pill" data-london>London</p>
+        {/* filled from /api/now-playing (Apple Music) after first paint; stays hidden until there's a track */}
+        <p class="pill music" data-np hidden>
+          <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-l"></span> <span class="np-t"></span><span class="np-ago"></span>
+        </p>
+      </div>
+    </div>
+  </section>
+</Shell>

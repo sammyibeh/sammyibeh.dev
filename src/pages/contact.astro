@@ -1,0 +1,81 @@
+---
+import Shell from '../layouts/Shell.astro'
+import { siteMetadata } from 'data/config'
+
+const { author } = siteMetadata
+// key, label, optional note, input type, autocomplete, placeholder, required
+const fields = [
+  ['name', 'What’s your name?', '', 'text', 'name', 'Ada Lovelace', true],
+  ['email', 'Your email?', '', 'email', 'email', 'ada@analytical.engine', true],
+  ['phone', 'WhatsApp number', '(optional)', 'tel', 'tel', '+44 …', false],
+] as const
+---
+
+<Shell page="contact" title="Contact" description="Get in touch with Sammy Ibeh: send a message from a terminal-style form, or find him on GitHub and LinkedIn.">
+  <section class="contact-hero glow-zone">
+    <div class="wrap contact">
+      <div class="head">
+        <p class="prompt" aria-hidden="true">sammy@ibeh:~$ <b>./contact</b></p>
+        <h1 aria-label="Get in touch"><span class="num" aria-hidden="true">03.</span><span class="t" aria-hidden="true">Get in touch</span></h1>
+      </div>
+      <div class="panel rv">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>sammy@ibeh: ~/contact</span><span class="r">--help · ^C</span></div>
+        <div class="session">
+          <div class="log2" id="session-log" role="log" aria-live="polite" aria-label="Contact session"></div>
+          {/* Without JS this posts natively; Netlify records it and shows /success/. */}
+          <form class="cform" id="contact-form" name="contact" method="POST" action="/success/" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact" />
+            <p hidden><label>Don’t fill this out if you’re human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+            {
+              fields.map(([key, label, note, type, ac, ph, req]) => (
+                <div class="row" data-key={key} data-req={req ? '1' : '0'}>
+                  <label for={`f-${key}`}>
+                    <span class="pr" aria-hidden="true">
+                      <span>?</span>
+                    </span>{' '}
+                    {label} {note && <span class="opt">{note}</span>}
+                  </label>
+                  <input
+                    id={`f-${key}`}
+                    name={key}
+                    type={type}
+                    autocomplete={ac}
+                    required={req}
+                    placeholder={ph}
+                    aria-describedby={`f-${key}-err`}
+                    spellcheck="false"
+                  />
+                  <span class="err" id={`f-${key}-err`} aria-live="polite"></span>
+                </div>
+              ))
+            }
+            <div class="row" data-key="message" data-req="1">
+              <label for="f-message"><span class="pr" aria-hidden="true"><span>?</span></span> What are we building?</label>
+              <textarea id="f-message" name="message" rows="3" required placeholder="Tell me about it." aria-describedby="f-message-err f-message-hint"></textarea>
+              <span class="hint2 flow-only" id="f-message-hint">shift+enter: new line</span>
+              <span class="err" id="f-message-err" aria-live="polite"></span>
+            </div>
+            <div class="actions">
+              <button class="btn" type="submit"><span class="flow-only">Y · send it</span><span class="noflow">$ send</span></button>
+              <small class="flow-only"><kbd>y</kbd> / <kbd>n</kbd></small>
+            </div>
+            <div class="toolbar flow-only">
+              <button class="ctrl" type="button" data-act="help">--help</button>
+              <button class="ctrl" type="button" data-act="back">↑ edit previous</button>
+              <button class="ctrl" type="button" data-act="cancel">^C cancel</button>
+              <button class="ctrl restart" type="button" hidden>↻ run ./contact again</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="rv side" style="--i:2">
+        <h2 class="h">other channels</h2>
+        <ul class="channels">
+          <li><small>email</small><a href={`mailto:${author.email}`}>{author.email}</a></li>
+          <li><small>linkedin</small><a href="https://linkedin.com/in/ibehsamuel" target="_blank" rel="noopener noreferrer">in/ibehsamuel<span class="sr"> (opens in new tab)</span></a></li>
+        </ul>
+        <p class="note">No cookies or tracking. Messages go via Netlify Forms. <a href="/privacy/">privacy</a></p>
+      </div>
+    </div>
+  </section>
+</Shell>
