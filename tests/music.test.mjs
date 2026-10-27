@@ -20,7 +20,7 @@ const memStore = (init = {}) => {
   }
 }
 const keys = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify'])
-const pem = `-----BEGIN PRIVATE KEY-----\n${Buffer.from(await crypto.subtle.exportKey('pkcs8', keys.privateKey)).toString('base64')}\n-----END PRIVATE KEY-----`
+const pem = `-----BEGIN PRIVATE KEY-----\n${Buffer.from(await crypto.subtle.exportKey('pkcs8', keys.privateKey)).toString('base64')}\n-----END PRIVATE KEY-----` // gitleaks:allow: a throwaway key generated above, never a real secret
 const SECRET = 'correct horse battery staple, twice over'
 const env = { APPLE_TEAM_ID: 'TEAM123456', APPLE_KEY_ID: 'KEY1234567', APPLE_MUSIC_PRIVATE_KEY: pem.replace(/\n/g, '\\n'), MUSIC_AUTH_SECRET: SECRET, URL: 'https://sammyibeh.dev' }
 const song = (id = 's1', name = 'Song') => ({ id, type: 'songs', attributes: { name, artistName: 'Band', albumName: 'LP', url: `https://music.apple.com/song/${id}`, artwork: { url: 'https://img/{w}x{h}bb.jpg' } } })

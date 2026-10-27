@@ -1,0 +1,2 @@
+# The music tests' throwaway key, generated at runtime (see the gitleaks:allow note on that line).
+4fa5af23264caecce85b88a08d8ac1f3bd373b6d:tests/music.test.mjs:private-key:23
